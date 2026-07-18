@@ -1,0 +1,2 @@
+b89927d7c665823b36f158854758b067a8b67f9fce2ec5e2da3d28ba5a3d3029  libkattplay_runtime.so
+a13268a408bffb0dcd4dbc2be3638b0ca02da91c8199bafb7ad5d65fd4826549  CApi.h

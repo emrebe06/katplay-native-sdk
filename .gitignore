@@ -1,0 +1,37 @@
+# KatPlay engine binaries are distributed as GitHub Release assets, not Git blobs.
+platforms/**/*.dll
+platforms/**/*.so
+platforms/**/*.dylib
+release/*.zip
+release/*.tar.gz
+release/*.sig
+
+# Never commit signing secrets or platform signing credentials.
+*private*.pem
+*private*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+katplay-release-ed25519
+
+# Build/tool output.
+build/
+build-*/
+bin/
+obj/
+.gradle/
+node_modules/
+__pycache__/
+*.pyc
+*.pdb
+*.obj
+*.a
+*.lib
+
+# Editor/OS metadata.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+

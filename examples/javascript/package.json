@@ -1,0 +1,13 @@
+{
+  "name": "kattplay-javascript-example",
+  "version": "0.1.0-alpha.1",
+  "private": true,
+  "description": "KatPlay C ABI example for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "koffi": "latest"
+  }
+}

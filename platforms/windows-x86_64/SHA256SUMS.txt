@@ -1,0 +1,2 @@
+9359a0c147c9dc5bd71d597b94b37c6f8b55cd24d76eaf1d36a0c2ce3be0e26b  kattplay_runtime.dll
+a13268a408bffb0dcd4dbc2be3638b0ca02da91c8199bafb7ad5d65fd4826549  CApi.h

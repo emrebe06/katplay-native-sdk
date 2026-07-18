@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+# Preserve release-integrity material byte-for-byte across platforms.
+release/SHA256SUMS.txt text eol=lf
+keys/*.pub text eol=lf
+keys/allowed_signers text eol=lf
+*.sig -text
+
+# Compiled release assets are binary even when force-added manually.
+*.dll -text
+*.so -text
+*.dylib -text
+*.zip -text
+*.gz -text
