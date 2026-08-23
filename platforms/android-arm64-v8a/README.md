@@ -3,8 +3,9 @@
 Files:
 
 - `libkattplay.so` — KatPlay JNI runtime, AAudio output.
+- `CApi.h` — ABI 2 public header.
 - `SHA256SUMS.txt` — package file checksum.
 
-Copy the `.so` to `app/src/main/jniLibs/arm64-v8a/`. Minimum Android API is 26. Use the Kotlin or Java wrapper under `examples/`; its package/class must remain `com.kattplay.NativePlayer`.
+Copy the `.so` to `app/src/main/jniLibs/arm64-v8a/`. Minimum Android API is 26. Use the Kotlin or Java wrapper under `examples/`; its package/class must remain `com.kattplay.NativePlayer`. Auto/KatDirect requests fall back to KatSafe when exclusive low-latency output is unavailable.
 
-License: Alpha 1 is limited to free personal, non-commercial use. Publishing an APK/AAB, public beta or store application is not licensed, even when the application is free. Read the `LICENSE.md` included at the archive root.
+License: this update grants no new commercial or redistribution rights. Read the `LICENSE.md` included at the archive root.

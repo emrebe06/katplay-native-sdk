@@ -14,6 +14,32 @@ public sealed class NativePlayer : IDisposable
         Error = 5
     }
 
+    public enum OutputMode
+    {
+        Auto = 0,
+        Safe = 1,
+        Direct = 2
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct OutputStatus
+    {
+        public uint StructSize;
+        public int RequestedMode;
+        public int ActiveMode;
+        public int DataPath;
+        public int Format;
+        public int SharingMode;
+        public int PerformanceMode;
+        public int SampleRate;
+        public int ChannelCount;
+        public int FramesPerBurst;
+        public int BufferSizeFrames;
+        public ulong XrunCount;
+        public ulong RecoveryCount;
+        public int LastRecoveryReason;
+    }
+
     private const string Library = "kattplay_runtime";
     private nint _handle;
 
@@ -35,6 +61,20 @@ public sealed class NativePlayer : IDisposable
     public void Play() => Require(Native.kattplay_play(RequireHandle()), "play");
     public void RecoverOutput() => Require(
         Native.kattplay_recover_output(RequireHandle()), "recover output");
+    public void SetOutputMode(OutputMode mode) => Require(
+        Native.kattplay_set_output_mode(RequireHandle(), mode),
+        "set output mode");
+    public OutputStatus GetOutputStatus()
+    {
+        var status = new OutputStatus
+        {
+            StructSize = (uint)Marshal.SizeOf<OutputStatus>()
+        };
+        Require(
+            Native.kattplay_get_output_status(RequireHandle(), ref status),
+            "get output status");
+        return status;
+    }
     public void Pause() => Native.kattplay_pause(RequireHandle());
     public void Stop() => Native.kattplay_stop(RequireHandle());
     public void Seek(double seconds) => Require(
@@ -84,6 +124,14 @@ public sealed class NativePlayer : IDisposable
 
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int kattplay_recover_output(nint handle);
+
+        [DllImport(Library, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int kattplay_set_output_mode(
+            nint handle, OutputMode mode);
+
+        [DllImport(Library, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern int kattplay_get_output_status(
+            nint handle, ref OutputStatus status);
 
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void kattplay_pause(nint handle);

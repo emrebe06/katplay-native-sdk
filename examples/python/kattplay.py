@@ -8,6 +8,25 @@ class KattPlayError(RuntimeError):
     pass
 
 
+class OutputStatus(ctypes.Structure):
+    _fields_ = [
+        ("struct_size", ctypes.c_uint32),
+        ("requested_mode", ctypes.c_int32),
+        ("active_mode", ctypes.c_int32),
+        ("data_path", ctypes.c_int32),
+        ("format", ctypes.c_int32),
+        ("sharing_mode", ctypes.c_int32),
+        ("performance_mode", ctypes.c_int32),
+        ("sample_rate", ctypes.c_int32),
+        ("channel_count", ctypes.c_int32),
+        ("frames_per_burst", ctypes.c_int32),
+        ("buffer_size_frames", ctypes.c_int32),
+        ("xrun_count", ctypes.c_uint64),
+        ("recovery_count", ctypes.c_uint64),
+        ("last_recovery_reason", ctypes.c_int32),
+    ]
+
+
 class NativePlayer:
     UNINITIALIZED = 0
     STOPPED = 1
@@ -15,6 +34,9 @@ class NativePlayer:
     PAUSED = 3
     FINISHED = 4
     ERROR = 5
+    OUTPUT_AUTO = 0
+    OUTPUT_SAFE = 1
+    OUTPUT_DIRECT = 2
 
     def __init__(self, library: str | Path, sample_rate: int = 48_000,
                  channels: int = 2) -> None:
@@ -37,6 +59,12 @@ class NativePlayer:
         lib.kattplay_play.restype = ctypes.c_int
         lib.kattplay_recover_output.argtypes = [ctypes.c_void_p]
         lib.kattplay_recover_output.restype = ctypes.c_int
+        lib.kattplay_set_output_mode.argtypes = [ctypes.c_void_p, ctypes.c_int]
+        lib.kattplay_set_output_mode.restype = ctypes.c_int
+        lib.kattplay_get_output_status.argtypes = [
+            ctypes.c_void_p, ctypes.POINTER(OutputStatus)
+        ]
+        lib.kattplay_get_output_status.restype = ctypes.c_int
         lib.kattplay_pause.argtypes = [ctypes.c_void_p]
         lib.kattplay_stop.argtypes = [ctypes.c_void_p]
         lib.kattplay_seek_seconds.argtypes = [ctypes.c_void_p, ctypes.c_double]
@@ -101,6 +129,23 @@ class NativePlayer:
         self._require(
             self._lib.kattplay_recover_output(self._handle), "recover_output"
         )
+
+    def set_output_mode(self, mode: int) -> None:
+        self._require(
+            self._lib.kattplay_set_output_mode(self._handle, mode),
+            "set_output_mode",
+        )
+
+    def output_status(self) -> OutputStatus:
+        status = OutputStatus()
+        status.struct_size = ctypes.sizeof(OutputStatus)
+        self._require(
+            self._lib.kattplay_get_output_status(
+                self._handle, ctypes.byref(status)
+            ),
+            "get_output_status",
+        )
+        return status
 
     def close(self) -> None:
         if self._handle:

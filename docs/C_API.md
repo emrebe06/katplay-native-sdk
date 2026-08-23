@@ -1,4 +1,4 @@
-# KatPlay C API — ABI 1
+# KatPlay C API — ABI 2
 
 Include `include/kattplay/CApi.h` and load the platform runtime:
 
@@ -37,9 +37,34 @@ Every successful `kattplay_create` must be paired with exactly one `kattplay_des
 | 4 | Finished |
 | 5 | Error |
 
+## Output modes and diagnostics
+
+ABI 2 adds kattplay_set_output_mode and kattplay_get_output_status. Initialize
+kattplay_output_status.struct_size to sizeof(kattplay_output_status) before
+calling the snapshot function.
+
+KATTPLAY_OUTPUT_AUTO tries the best supported native path.
+KATTPLAY_OUTPUT_DIRECT requests KatDirect but safely falls back when the device
+rejects it. Always inspect active_mode: a request is not proof that the direct
+path opened. KATTPLAY_OUTPUT_SAFE explicitly selects the shared, compatible
+path.
+
+The snapshot reports negotiated sample rate, channel count, PCM format,
+sharing/performance modes, frames per burst, buffer size, xruns, recovery count
+and last recovery reason. KATTPLAY_DATA_PATH_MMAP_CONFIRMED is emitted only
+when the runtime can prove MMAP use; otherwise the value remains UNKNOWN or
+LEGACY.
+
+Changing mode rebuilds the output while preserving the loaded source, position
+and paused/playing intent. It is a control-thread operation, not an
+audio-callback operation.
+
 ## ABI policy
 
-Call `kattplay_abi_version()` before advanced integration. This package exposes ABI `1`. A future incompatible C interface must increment that number. `kattplay_version()` returns the human-readable engine version.
+Call kattplay_abi_version() before advanced integration. This package exposes
+ABI 2; all ABI 1 functions remain available. A future incompatible C interface
+must increment that number. kattplay_version() returns the human-readable
+engine version.
 
 ## Threading
 

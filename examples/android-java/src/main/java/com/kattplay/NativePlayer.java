@@ -7,6 +7,10 @@ import android.os.ParcelFileDescriptor;
 import java.io.IOException;
 
 public final class NativePlayer implements AutoCloseable {
+    public static final int OUTPUT_AUTO = 0;
+    public static final int OUTPUT_SAFE = 1;
+    public static final int OUTPUT_DIRECT = 2;
+
     private long handle;
 
     static { System.loadLibrary("kattplay"); }
@@ -32,6 +36,12 @@ public final class NativePlayer implements AutoCloseable {
     public boolean play() { return handle != 0 && nativePlay(handle); }
     public boolean recoverOutput() {
         return handle != 0 && nativeRecoverOutput(handle);
+    }
+    public boolean setOutputMode(int mode) {
+        return handle != 0 && nativeSetOutputMode(handle, mode);
+    }
+    public long[] getOutputStatus() {
+        return handle == 0 ? null : nativeOutputStatus(handle);
     }
     public void pause() { if (handle != 0) nativePause(handle); }
     public void stop() { if (handle != 0) nativeStop(handle); }
@@ -64,6 +74,8 @@ public final class NativePlayer implements AutoCloseable {
     private native boolean nativeLoad(long handle, String path);
     private native boolean nativePlay(long handle);
     private native boolean nativeRecoverOutput(long handle);
+    private native boolean nativeSetOutputMode(long handle, int mode);
+    private native long[] nativeOutputStatus(long handle);
     private native void nativePause(long handle);
     private native void nativeStop(long handle);
     private native boolean nativeSeek(long handle, double seconds);

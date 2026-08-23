@@ -1,0 +1,4 @@
+79dad610219251d6fdb4dff9479e1983584041e330e6e08a0441c27e057ff04b  KatPlay-0.2.0-alpha.1-android-arm64-v8a.zip
+8f29506eecaa46f25dab94bd5b54c0a7c0cdb73e386bb0b848d5d6ccca5124a6  KatPlay-0.2.0-alpha.1-integration-examples.zip
+d212fa8c9b14fe3f66bb8095b86314bfc9d30739936b821e8140b5ec3eadae63  KatPlay-0.2.0-alpha.1-linux-x86_64.tar.gz
+07370a0f12b0831d5851f9f449b6608aa7632da5c097de318912bcf2b47e4740  KatPlay-0.2.0-alpha.1-windows-x86_64.zip

@@ -10,10 +10,12 @@
 ## Android arm64-v8a
 
 - Minimum Android version: API 26 / Android 8.
-- Native output: AAudio.
+- Native output: AAudio with Auto, KatDirect preview and KatSafe modes.
 - Runtime file: `libkattplay.so`.
 - Put it under `app/src/main/jniLibs/arm64-v8a/`.
 - Kotlin and Java wrappers must use package/class name `com.kattplay.NativePlayer`, matching the exported JNI bridge.
+- KatDirect is active only when AAudio returns exclusive + low-latency output.
+  Rejected requests fall back to shared low-latency and then KatSafe.
 - Android audio focus, media session, notification and foreground-service policy stay in the application layer.
 
 ## Linux x86-64
@@ -29,9 +31,10 @@
 
 Playback scope for this Alpha package is WAV, FLAC and MP3. AAC is not advertised by this runtime package until its full streaming/player path has passed the same release tests.
 
-## Alpha 1 license scope
+## License scope
 
-Alpha 1 is available only for free personal, non-commercial use by individual natural persons. Company evaluation or use, client work, monetization, public redistribution, production deployment and embedding in a publicly distributed product require prior written permission. Commercial licensing is planned for Alpha 2.
+This technical update grants no new commercial or redistribution rights.
+LICENSE.md is authoritative.
 
 ## Not included
 

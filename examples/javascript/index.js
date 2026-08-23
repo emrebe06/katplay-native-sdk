@@ -18,6 +18,7 @@ const create = native.func('void* kattplay_create(uint32_t, uint16_t)');
 const destroy = native.func('void kattplay_destroy(void*)');
 const load = native.func('int kattplay_load(void*, const char*)');
 const play = native.func('int kattplay_play(void*)');
+const setOutputMode = native.func('int kattplay_set_output_mode(void*, int)');
 const stop = native.func('void kattplay_stop(void*)');
 const state = native.func('int kattplay_state(void*)');
 const position = native.func('double kattplay_position_seconds(void*)');
@@ -26,6 +27,11 @@ const lastError = native.func('const char* kattplay_last_error(void*)');
 
 const handle = create(48000, 2);
 if (!handle) throw new Error('kattplay_create returned null');
+const requestedOutputMode = Number(process.env.KATTPLAY_OUTPUT_MODE ?? '0');
+if (!setOutputMode(handle, requestedOutputMode)) {
+  destroy(handle);
+  throw new Error('set output mode failed');
+}
 
 let timer = null;
 let closed = false;

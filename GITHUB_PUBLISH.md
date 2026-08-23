@@ -1,4 +1,4 @@
-# Publish KatPlay Alpha 1 on GitHub
+# Publish KatPlay Alpha 2 Preview on GitHub
 
 ## Repository settings
 
@@ -25,7 +25,7 @@ cd "C:\Users\Emre Demirbaş\Desktop\kat-player"
 git init
 git branch -M main
 git add .
-git commit -m "Release KatPlay 0.1.0 Alpha 1 SDK"
+git commit -m "Release KatPlay 0.2.0 Alpha 2 Preview SDK"
 git remote add origin https://github.com/<GITHUB_USERNAME>/katplay-native-sdk.git
 git push -u origin main
 ```
@@ -37,38 +37,37 @@ private signing key.
 ## Create the GitHub Release
 
 1. Open `Releases` and choose `Draft a new release`.
-2. Create tag `v0.1.0-alpha.1` targeting `main`.
-3. Title it `KatPlay 0.1.0 Alpha 1 — Personal Non-Commercial Preview`.
+2. Create tag `v0.2.0-alpha.1` targeting `main`.
+3. Title it `KatPlay 0.2.0 Alpha 2 — KatDirect Preview`.
 4. Enable `Set as a pre-release`.
 5. Upload these files from the local `release/` directory:
 
-   - `KatPlay-0.1.0-alpha.1-windows-x86_64.zip`
-   - `KatPlay-0.1.0-alpha.1-android-arm64-v8a.zip`
-   - `KatPlay-0.1.0-alpha.1-linux-x86_64.tar.gz`
-   - `KatPlay-0.1.0-alpha.1-integration-examples.zip`
-   - `SHA256SUMS.txt`
-   - `SHA256SUMS.txt.sig`
+   - `KatPlay-0.2.0-alpha.1-windows-x86_64.zip`
+   - `KatPlay-0.2.0-alpha.1-android-arm64-v8a.zip`
+   - `KatPlay-0.2.0-alpha.1-linux-x86_64.tar.gz`
+   - `KatPlay-0.2.0-alpha.1-integration-examples.zip`
+   - `SHA256SUMS-0.2.0-alpha.1.txt`
 
 6. Paste the following release summary:
 
 ```text
-KatPlay Alpha 1 is a binary-only native C++ audio runtime by Emre Demirbaş.
+KatPlay Alpha 2 is a binary-only native C++ audio runtime by Emre Demirbaş.
 
 - Native WAV, FLAC and MP3 playback
 - Windows x86-64 WASAPI
-- Android arm64-v8a AAudio/JNI (API 26+)
+- Android arm64-v8a AAudio/JNI with KatDirect/KatSafe negotiation (API 26+)
 - Linux x86-64 ALSA with PipeWire ALSA compatibility
-- C ABI plus Kotlin, Java, Python, .NET and Node.js examples
+- Backward-compatible C ABI 2 plus Kotlin, Java, Python, .NET and Node.js examples
 - No FFmpeg runtime or linked binary dependency
 
-License: free personal, non-commercial use only. Company use, client work,
-monetization, redistribution and product embedding are not licensed in Alpha 1.
+This technical update grants no new commercial or redistribution rights.
+LICENSE.md is authoritative.
 
-Linux note: ELF/ABI/backend verification passed; audible playback on a physical
-Linux installation remains an Alpha validation item.
+Physical Android route/focus/soak checks and audible Linux playback remain
+Alpha validation items.
 
-Verify downloads with SHA256SUMS.txt and SHA256SUMS.txt.sig.
+Verify downloads with SHA256SUMS-0.2.0-alpha.1.txt. The preview manifest is
+unsigned until the private KatPlay release key signs it.
 ```
 
 7. Publish the release as a pre-release.
-
