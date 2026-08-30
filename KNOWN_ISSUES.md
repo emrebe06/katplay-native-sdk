@@ -1,6 +1,6 @@
 # Known issues and Alpha limitations
 
-This list applies to KatPlay `0.2.0-alpha.1`.
+This list applies to KatPlay `0.3.0-alpha.1`.
 
 ## Linux output validation
 
@@ -24,7 +24,15 @@ This list applies to KatPlay `0.2.0-alpha.1`.
 ## Format scope
 
 - Advertised playback formats are WAV, FLAC and MP3.
-- AAC/M4A, OGG and Opus are not part of the public Alpha 2 playback contract.
+- AAC is decodable but deliberately not advertised. The native AAC-LC decoder
+  is under incremental conformance development and currently handles only a
+  narrow slice of the spectral codebooks, so most real-world AAC files are
+  rejected with an unsupported-format error rather than played. Do not build on
+  it yet. ADTS is the only AAC container recognised; `.m4a`/MP4 is not read.
+- Ogg and Opus are not playable. Alpha 3 adds an Ogg container parser, an Opus
+  range decoder and the CELT pulse-vector codebook to the engine, but no Opus
+  decoder exists yet and no Opus audio can be produced.
+- Retuned output is written as FLAC regardless of the source container.
 - Unusual, corrupted or deliberately adversarial files have not yet completed
   a broad public fuzzing campaign.
 
@@ -40,6 +48,9 @@ This list applies to KatPlay `0.2.0-alpha.1`.
   native `.dll` or `.so`.
 - ABI 2 retains all ABI 1 entry points, but Alpha APIs may still grow before
   the first stable release.
+- `kattplay_retune_file` is a blocking, whole-file operation. It must be called
+  from a worker thread; calling it from a UI thread will stall that thread for
+  the length of the conversion.
 
 ## License scope
 

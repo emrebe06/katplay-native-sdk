@@ -73,3 +73,43 @@ KatPlay performs decode and device rendering on internal native threads. The app
 ## Output recovery
 
 After a device route or stream failure, call `kattplay_recover_output(handle)`. On Android, audio focus and wired/Bluetooth route policy remain the responsibility of the application/service layer; the native runtime reopens the device while preserving playback position.
+
+## Offline retuning
+
+```c
+int kattplay_retune_file(const char* input_utf8,
+                         const char* output_utf8,
+                         double reference_hz,
+                         char* error,
+                         size_t error_size);
+```
+
+Decodes `input_utf8`, shifts it to a different concert-pitch reference and
+writes `output_utf8`. The output container follows the output file extension.
+
+`reference_hz` must be between 220 and 880. 440 is the standard reference and
+leaves pitch untouched. Any other value shifts pitch by
+`12 * log2(reference_hz / 440)` semitones while holding duration constant, so
+the result lines up sample-for-sample in time with its source and can be
+compared against it directly.
+
+This call takes no handle and touches no player, so it is safe to run while
+playback is in progress. It is a blocking, whole-file operation: it decodes the
+entire source and runs a phase vocoder over it. Do not call it from an audio
+callback or from a UI thread.
+
+Returns `1` on success. On failure it returns `0` and, when `error_size` is not
+zero, writes a null-terminated reason into `error`. Pass `NULL` and `0` to
+ignore the message.
+
+```c
+char reason[256];
+if (!kattplay_retune_file("in.flac", "out.flac", 432.0, reason, sizeof(reason))) {
+    fprintf(stderr, "retune failed: %s\n", reason);
+}
+```
+
+Retuning is deliberately a file operation rather than a playback setting. The
+pitch shift needs the whole track, which is far more work than a transport can
+absorb between callbacks; doing it once and keeping the result costs the same
+work but pays it a single time.

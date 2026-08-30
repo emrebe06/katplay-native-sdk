@@ -1,4 +1,4 @@
-# KatPlay Native Runtime SDK — 0.2.0-alpha.1
+# KatPlay Native Runtime SDK — 0.3.0-alpha.1
 
 **By Emre Demirbaş**
 
@@ -14,17 +14,30 @@ KatPlay is the native playback-runtime branch of the KatBalance entropy-aware DS
 
 The engine plays native WAV, FLAC and MP3 sources. No FFmpeg, ExoPlayer or Media3 binary, source tree or runtime dependency is included.
 
-## Alpha 2 highlights
+## Alpha 3 highlights
+
+- MP3 gapless trimming now holds on the streaming path as well as the buffered
+  one. Alpha 2 advertised this behaviour, but the encoder delay and padding live
+  in the ID3v2 tag, which the incremental reader skipped; streamed output
+  carried one frame more than the buffered decode.
+- AAC streaming no longer rebuilds its IMDCT overlap for every packet, so each
+  frame is overlap-added with the previous frame's tail instead of silence.
+- `kattplay_retune_file` converts a file to a different concert-pitch reference
+  offline, preserving duration. It takes no handle and does not disturb
+  playback; see [docs/C_API.md](docs/C_API.md).
+- The codec core is now verified on ARM64 hardware with the NEON dispatch level
+  confirmed active, not merely compiled for it.
+
+Carried over from Alpha 2 and unchanged:
 
 - ABI 2 keeps the Alpha 1 transport calls and adds output-mode control and an allocation-free output-status snapshot.
 - Android Auto/KatDirect requests try exclusive low-latency AAudio first, then shared low-latency, then KatSafe.
 - The runtime reports negotiated sample rate, channels, format, sharing/performance mode, buffer geometry, xruns and recovery count.
 - KatDirect is reported active only when AAudio actually returns exclusive + low-latency. MMAP remains Unknown unless it can be confirmed; the SDK does not make a hardware-bypass or bit-perfect claim.
-- WAV, FLAC and MP3 playback uses the current KatBalance codec core, including MP3 gapless delay/padding handling.
 
 ## Downloads
 
-Compiled runtimes are published as versioned GitHub Release assets rather than committed as large binary blobs in Git history. Download the archive matching your platform. Alpha 2 uses `release/SHA256SUMS-0.2.0-alpha.1.txt`; the Alpha 1 signed manifest remains unchanged.
+Compiled runtimes are published as versioned GitHub Release assets rather than committed as large binary blobs in Git history. Download the archive matching your platform. Alpha 3 uses `release/SHA256SUMS-0.3.0-alpha.1.txt`; earlier manifests remain unchanged.
 
 ## Folder map
 
@@ -42,7 +55,7 @@ docs/                          ABI and platform notes
 release/                       Separate distributable archives
 keys/                          Public release-verification key only
 LICENSE.md                     Alpha 1 personal/non-commercial terms
-COMMERCIAL_USE.md              Commercial-use boundary and Alpha 2 notice
+COMMERCIAL_USE.md              Commercial-use boundary and Alpha notice
 CHANGELOG.md                   Version history
 SECURITY.md                    Private vulnerability reporting policy
 THIRD_PARTY_NOTICES.md         Toolchain, system and example notices
@@ -59,13 +72,13 @@ KNOWN_ISSUES.md                Current Alpha limitations
 
 ## License status
 
-KatPlay 0.2.0-alpha.1 remains proprietary software. This technical update does not grant new commercial or redistribution rights; [LICENSE.md](LICENSE.md) is authoritative.
+KatPlay 0.3.0-alpha.1 remains proprietary software. This technical update does not grant new commercial or redistribution rights; [LICENSE.md](LICENSE.md) is authoritative.
 
 Read [LICENSE.md](LICENSE.md) and [COMMERCIAL_USE.md](COMMERCIAL_USE.md) before downloading or using the runtime.
 
 ## Integrity and security
 
-The Alpha 1 checksum manifest is signed with the KatPlay Ed25519 release key. The public-key fingerprint is `SHA256:izX4xT8KNnsRqXiQ9j18CwlW04dUGsprDpoukR7vQeU`. The Alpha 2 checksum file is deliberately marked unsigned until the private release key signs it; no signature is fabricated. Read [SECURITY.md](SECURITY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [KNOWN_ISSUES.md](KNOWN_ISSUES.md) and [docs/VERIFY_RELEASE.md](docs/VERIFY_RELEASE.md) before distribution or security testing.
+The Alpha 1 checksum manifest is signed with the KatPlay Ed25519 release key. The public-key fingerprint is `SHA256:izX4xT8KNnsRqXiQ9j18CwlW04dUGsprDpoukR7vQeU`. The Alpha 2 and Alpha 3 checksum files are deliberately marked unsigned until the private release key signs them; no signature is fabricated. Read [SECURITY.md](SECURITY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [KNOWN_ISSUES.md](KNOWN_ISSUES.md) and [docs/VERIFY_RELEASE.md](docs/VERIFY_RELEASE.md) before distribution or security testing.
 
 ## Alpha notice
 

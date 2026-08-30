@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdint.h>
 
 #if defined(_WIN32)
@@ -72,6 +73,29 @@ KATTPLAY_CAPI int kattplay_state(kattplay_handle handle);
 KATTPLAY_CAPI double kattplay_position_seconds(kattplay_handle handle);
 KATTPLAY_CAPI double kattplay_duration_seconds(kattplay_handle handle);
 KATTPLAY_CAPI const char* kattplay_last_error(kattplay_handle handle);
+
+/*
+ * Offline retune: decodes input_utf8, shifts it to the given concert-pitch
+ * reference and writes output_utf8. The output container follows the output
+ * file extension.
+ *
+ * reference_hz must be between 220 and 880. 440 is the standard reference and
+ * leaves pitch untouched. The shift preserves duration, so the result lines up
+ * with the source for A/B listening.
+ *
+ * This is a blocking, whole-file operation and must not be called from an
+ * audio or UI thread. It takes no handle and touches no player, so it is safe
+ * to run while playback is in progress.
+ *
+ * Returns 1 on success. On failure it returns 0 and, when error_size is not
+ * zero, writes a null-terminated reason into error. Pass NULL and 0 to ignore
+ * the message.
+ */
+KATTPLAY_CAPI int kattplay_retune_file(const char* input_utf8,
+                                       const char* output_utf8,
+                                       double reference_hz,
+                                       char* error,
+                                       size_t error_size);
 
 #ifdef __cplusplus
 }

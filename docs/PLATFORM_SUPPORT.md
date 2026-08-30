@@ -29,7 +29,22 @@
 
 ## Codec scope
 
-Playback scope for this Alpha package is WAV, FLAC and MP3. AAC is not advertised by this runtime package until its full streaming/player path has passed the same release tests.
+Playback scope for this Alpha package is WAV, FLAC and MP3.
+
+AAC is not advertised. The native AAC-LC decoder is still under incremental
+conformance development and rejects most real-world files; only ADTS is
+recognised as a container. It will be advertised once its streaming and player
+paths pass the same release tests as the three formats above.
+
+Ogg and Opus are not playable. The engine gained Ogg container parsing, an
+Opus range decoder and the CELT pulse-vector codebook in Alpha 3, but the Opus
+decoder itself does not exist yet.
+
+## Offline retuning
+
+`kattplay_retune_file` converts a file to a different concert-pitch reference
+and writes the result as FLAC. It reads every container the engine can decode
+and is independent of playback; see `docs/C_API.md`.
 
 ## License scope
 
