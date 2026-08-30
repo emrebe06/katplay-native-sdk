@@ -78,7 +78,7 @@ Read [LICENSE.md](LICENSE.md) and [COMMERCIAL_USE.md](COMMERCIAL_USE.md) before 
 
 ## Integrity and security
 
-The Alpha 1 checksum manifest is signed with the KatPlay Ed25519 release key. The public-key fingerprint is `SHA256:izX4xT8KNnsRqXiQ9j18CwlW04dUGsprDpoukR7vQeU`. The Alpha 2 and Alpha 3 checksum files are deliberately marked unsigned until the private release key signs them; no signature is fabricated. Read [SECURITY.md](SECURITY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [KNOWN_ISSUES.md](KNOWN_ISSUES.md) and [docs/VERIFY_RELEASE.md](docs/VERIFY_RELEASE.md) before distribution or security testing.
+The Alpha 1 checksum manifest is signed by the original KatPlay Ed25519 release key (`SHA256:izX4xT8KNnsRqXiQ9j18CwlW04dUGsprDpoukR7vQeU`). The signing key was rotated on 30 August 2026 after the original private key was lost; Alpha 3 is signed by the replacement key (`SHA256:KQRIInURMNolBohsw8n9aNTsduSSFokUbad8CAEboWY`). Both public keys remain committed so historical signatures continue to verify. Read [SECURITY.md](SECURITY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [KNOWN_ISSUES.md](KNOWN_ISSUES.md) and [docs/VERIFY_RELEASE.md](docs/VERIFY_RELEASE.md) before distribution or security testing.
 
 ## Alpha notice
 

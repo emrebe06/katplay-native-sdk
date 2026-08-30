@@ -47,6 +47,7 @@ private signing key.
    - `KatPlay-0.3.0-alpha.1-linux-x86_64.tar.gz`
    - `KatPlay-0.3.0-alpha.1-integration-examples.zip`
    - `SHA256SUMS-0.3.0-alpha.1.txt`
+   - `SHA256SUMS-0.3.0-alpha.1.txt.sig`
 
 6. Paste the following release summary:
 
@@ -83,8 +84,9 @@ AAC, Ogg and Opus are not part of the advertised playback contract; see
 KNOWN_ISSUES.md. Physical Android route/focus/soak checks and audible Linux
 playback remain Alpha validation items.
 
-Verify downloads with SHA256SUMS-0.3.0-alpha.1.txt. The manifest is unsigned
-until the private KatPlay release key signs it.
+Verify downloads with `SHA256SUMS-0.3.0-alpha.1.txt` and its SSH signature
+`SHA256SUMS-0.3.0-alpha.1.txt.sig`. The signing-key fingerprint is
+`SHA256:KQRIInURMNolBohsw8n9aNTsduSSFokUbad8CAEboWY`.
 ```
 
 7. Publish the release as a pre-release.

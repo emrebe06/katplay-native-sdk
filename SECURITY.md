@@ -2,7 +2,7 @@
 
 ## Supported version
 
-KatPlay `0.1.0-alpha.1` is the only currently supported public SDK version.
+KatPlay `0.3.0-alpha.1` is the currently supported public SDK version.
 Because this is Alpha software, support is best-effort and no security SLA is
 offered.
 
@@ -42,11 +42,11 @@ and coordinated disclosure is safe.
 
 ## Release integrity
 
-Release assets are listed in `release/SHA256SUMS.txt`. The manifest is signed
-with the KatPlay Ed25519 release key. Verification instructions and the public
-key are under `docs/VERIFY_RELEASE.md` and `keys/`.
+Release assets are listed in the versioned `release/SHA256SUMS-*.txt`
+manifests. Signed manifests use an adjacent `.sig` file. Verification
+instructions, key-rotation history and public keys are under
+`docs/VERIFY_RELEASE.md` and `keys/`.
 
 Never trust a signing key delivered only beside a suspicious binary. Compare
 the public-key fingerprint against the value published in the official KatPlay
 repository and release notes.
-

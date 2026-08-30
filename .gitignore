@@ -14,6 +14,8 @@ release/*.sig
 *.jks
 *.keystore
 katplay-release-ed25519
+katplay-release-ed25519-*
+!keys/katplay-release-ed25519-*.pub
 
 # Build/tool output.
 build/
@@ -34,4 +36,3 @@ __pycache__/
 .vscode/
 .DS_Store
 Thumbs.db
-
