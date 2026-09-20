@@ -2,7 +2,7 @@
 
 ## Supported version
 
-KatPlay `0.3.0-alpha.1` is the currently supported public SDK version.
+KatPlay `0.4.0-alpha.1` is the currently supported public SDK version.
 Because this is Alpha software, support is best-effort and no security SLA is
 offered.
 

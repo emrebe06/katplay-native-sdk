@@ -87,15 +87,37 @@ int kattplay_retune_file(const char* input_utf8,
 Decodes `input_utf8`, shifts it to a different concert-pitch reference and
 writes `output_utf8`. The output container follows the output file extension.
 
-`reference_hz` must be between 220 and 880. 440 is the standard reference and
-leaves pitch untouched. Any other value shifts pitch by
-`12 * log2(reference_hz / 440)` semitones while holding duration constant, so
-the result lines up sample-for-sample in time with its source and can be
-compared against it directly.
+`reference_hz` must be between 110 and 1760. The source's own reference is
+measured from the audio instead of being assumed to be 440, so the shift is
+`12 * log2(reference_hz / measured_source_hz)` semitones. A mix that sits a few
+cents away from 440 would otherwise land the same few cents away from the
+target. Duration is held constant, so the result lines up in time with its
+source and can be compared against it directly.
+
+```c
+int kattplay_retune_file_ex(const char* input_utf8,
+                            const char* output_utf8,
+                            double reference_hz,
+                            double source_reference_hz,
+                            char* error,
+                            size_t error_size);
+```
+
+The same conversion with the source reference stated rather than measured.
+`source_reference_hz` of `0` measures it, which is what `kattplay_retune_file`
+does. State it when it is known: measuring an ambiguous mix — one whose
+sections disagree with each other — can differ by a cent or two from the number
+a musician would name.
+
+The source's integrated loudness is preserved rather than normalized to a
+target, and the true-peak ceiling never sits below the source's own peak level,
+so a retune delivers the same master at a different pitch instead of
+re-mastering it.
 
 This call takes no handle and touches no player, so it is safe to run while
 playback is in progress. It is a blocking, whole-file operation: it decodes the
-entire source and runs a phase vocoder over it. Do not call it from an audio
+entire source, measures it and runs a time-domain stretch (or a phase vocoder
+for shifts beyond about a semitone) over it. Do not call it from an audio
 callback or from a UI thread.
 
 Returns `1` on success. On failure it returns `0` and, when `error_size` is not

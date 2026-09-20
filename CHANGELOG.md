@@ -3,6 +3,77 @@
 All notable KatPlay SDK changes are recorded here. KatPlay is currently in
 Alpha; ABI and behavior may change before the first stable release.
 
+## [0.4.0-alpha.1] - 2026-09-20
+
+### Fixed
+
+- Offline retune assumed every source was tuned to A4 = 440 Hz. A mix that sits
+  a few cents away from that landed the same few cents away from the requested
+  target: on one test track a 432 Hz request produced 431.8 Hz. The source's own
+  reference is now measured from the audio, and the shift is computed from the
+  measurement.
+- Retuned output could exceed full scale. Shifting pitch changes the waveform
+  and therefore its peaks, and nothing constrained them before the integer PCM
+  write. A true-peak ceiling is now applied, never stricter than the source's
+  own peak level, and the source's integrated loudness is preserved so a retune
+  no longer re-masters the file.
+- Sub-bass broke up on retuned material. The time-domain stretch spliced every
+  22 ms with a crossfade shorter than a bass period and a search range narrower
+  than half of one, so splices landed out of phase and sprayed sidebands under
+  the bass. Segments, crossfade and search range were re-tuned against a
+  varispeed (pure resample) reference: bass fine-structure error on two test
+  tracks fell from 2.1-3.1 dB to 0.3-0.6 dB, with peak level and crest factor
+  preserved.
+- The top octave was dulled periodically. The output length was fitted with a
+  drifting linear interpolation whose response sweeps through a comb null; the
+  resampler now runs at the exact fractional ratio and no fitting pass remains.
+- MP3 files carrying a Xing/Info header decoded one frame of silence at the
+  start, because the header frame was decoded as audio. Such frames are now
+  recognised as metadata on both the buffered and streaming paths.
+
+### Added
+
+- `kattplay_retune_file_ex()` takes the source concert-pitch reference
+  explicitly; `0` measures it, which is what `kattplay_retune_file()` does.
+- The retune target range is now 110 to 1760 Hz, two octaves either side of
+  the source, instead of 220 to 880. Pitch accuracy measured across that range
+  on a synthetic tone: worst case 0.10 cents.
+- Encoded MP3 files carry a Xing/Info header with the encoder delay and end
+  padding, so other decoders can trim them exactly. The header names KatBalance
+  as the encoder. Decoders that only honour LAME's signature will still not
+  trim; the ID3 `iTunSMPB` tag this SDK already wrote is unchanged, and this
+  SDK's own decode was and remains sample-exact.
+- MP3 output keeps 1 dB of true-peak headroom, since lossy decoding overshoots
+  the encoded peak (measured +0.34 dBFS at 320 kbps).
+
+### Performance
+
+- A 3.5 minute track retunes in 18 s where it previously took 106 s, with
+  bit-identical output. The true-peak oversampler is now polyphase over
+  contiguous history instead of zero-stuffed convolution with two modulo
+  operations per tap, the limiter's lookahead maximum is O(1) per sample
+  instead of a full window scan, loudness metering splits across cores on the
+  gating grid, and the splice search runs through the SIMD dot product.
+
+### Compatibility
+
+- ABI 2 is unchanged. `kattplay_retune_file` keeps its signature;
+  `kattplay_retune_file_ex` is a new symbol. Its behaviour changes as described
+  above: the source reference is measured rather than assumed, and a true-peak
+  ceiling is applied to the result.
+- Alpha 1, Alpha 2 and Alpha 3 tags and release history remain intact.
+
+### Verification
+
+- The full native test suite passes on Windows x86-64: 163 tests, including new
+  regression tests for sub-bass harmonic purity after a retune, for the absence
+  of a false room tail, for concert-pitch estimation, and for chunked loudness
+  metering matching the single-threaded meter.
+- Retune quality was measured against a varispeed reference on two commercial
+  tracks; the numbers above are from those measurements.
+- The Linux and Android binaries are cross-compiled from the same sources and
+  were not executed on target hardware for this release.
+
 ## [0.3.0-alpha.1] - 2026-08-29
 
 ### Fixed

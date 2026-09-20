@@ -38,15 +38,18 @@ ssh-keygen -lf keys/katplay-release-ed25519-2026-08.pub -E sha256
 ## Verify the signed manifest
 
 Run from the directory containing the manifest and its `.sig` file. Point
-`-f` at the repository's `keys/allowed_signers` file. For Alpha 3:
+`-f` at the repository's `keys/allowed_signers` file. For Alpha 4:
 
 ```bash
 ssh-keygen -Y verify \
   -f ../keys/allowed_signers \
   -I katplay-release \
   -n katplay-release \
-  -s SHA256SUMS-0.3.0-alpha.1.txt.sig < SHA256SUMS-0.3.0-alpha.1.txt
+  -s SHA256SUMS-0.4.0-alpha.1.txt.sig < SHA256SUMS-0.4.0-alpha.1.txt
 ```
+
+Earlier manifests verify the same way with their own file names, for example
+`SHA256SUMS-0.3.0-alpha.1.txt`.
 
 Expected output includes:
 

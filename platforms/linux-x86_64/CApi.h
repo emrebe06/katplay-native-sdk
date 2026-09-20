@@ -79,9 +79,14 @@ KATTPLAY_CAPI const char* kattplay_last_error(kattplay_handle handle);
  * reference and writes output_utf8. The output container follows the output
  * file extension.
  *
- * reference_hz must be between 220 and 880. 440 is the standard reference and
- * leaves pitch untouched. The shift preserves duration, so the result lines up
- * with the source for A/B listening.
+ * reference_hz must be between 110 and 1760. The source's own reference is
+ * measured from the audio rather than assumed to be 440, because a mix that
+ * sits a few cents off would otherwise land a few cents off the target. The
+ * shift preserves duration, so the result lines up with the source for A/B
+ * listening, and the source's integrated loudness is preserved: only a
+ * true-peak ceiling is applied, and never below the source's own peak level.
+ *
+ * Use kattplay_retune_file_ex() to state the source reference explicitly.
  *
  * This is a blocking, whole-file operation and must not be called from an
  * audio or UI thread. It takes no handle and touches no player, so it is safe
@@ -96,6 +101,23 @@ KATTPLAY_CAPI int kattplay_retune_file(const char* input_utf8,
                                        double reference_hz,
                                        char* error,
                                        size_t error_size);
+
+/*
+ * Same as kattplay_retune_file(), with the source concert-pitch reference
+ * given instead of measured. Pass 0 for source_reference_hz to measure it,
+ * which is what kattplay_retune_file() does. Both references must be between
+ * 110 and 1760 Hz.
+ *
+ * State the source reference when it is known (a tuner reading, or a mix whose
+ * tuning is deliberate), since a measurement of an ambiguous mix can differ by
+ * a cent or two from the number a musician would name.
+ */
+KATTPLAY_CAPI int kattplay_retune_file_ex(const char* input_utf8,
+                                          const char* output_utf8,
+                                          double reference_hz,
+                                          double source_reference_hz,
+                                          char* error,
+                                          size_t error_size);
 
 #ifdef __cplusplus
 }

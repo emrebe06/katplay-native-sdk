@@ -1,4 +1,4 @@
-# KatPlay Native Runtime SDK — 0.3.0-alpha.1
+# KatPlay Native Runtime SDK — 0.4.0-alpha.1
 
 **By Emre Demirbaş**
 
@@ -13,6 +13,28 @@ KatPlay is the native playback-runtime branch of the KatBalance entropy-aware DS
 | Linux | `libkattplay_runtime.so` | ALSA default PCM; PipeWire through ALSA compatibility | x86-64 |
 
 The engine plays native WAV, FLAC and MP3 sources. No FFmpeg, ExoPlayer or Media3 binary, source tree or runtime dependency is included.
+
+## Alpha 4 highlights
+
+- Offline retune measures the source's own concert-pitch reference instead of
+  assuming A4 = 440 Hz. A mix a few cents off used to land the same few cents
+  off the target; on one test track a 432 Hz request produced 431.8 Hz.
+- The retune target range is now 110 to 1760 Hz. Pitch accuracy across that
+  range, measured on a synthetic tone: worst case 0.10 cents.
+- Sub-bass no longer breaks up on retuned material. The splice search now
+  covers more than half a bass period, so splices land in phase; bass
+  fine-structure error against a pure-resample reference fell from 2.1-3.1 dB
+  to 0.3-0.6 dB on two test tracks, with peak level preserved.
+- A retune keeps the source's integrated loudness and applies a true-peak
+  ceiling no stricter than the source's own peak, so it no longer re-masters
+  the file.
+- `kattplay_retune_file_ex` takes the source reference explicitly; `0` measures
+  it. See [docs/C_API.md](docs/C_API.md).
+- A 3.5 minute track retunes in 18 s where it previously took 106 s, with
+  bit-identical output.
+- MP3 files carrying a Xing/Info header no longer decode a frame of silence at
+  the start, and encoded MP3 files now carry that header themselves with the
+  encoder delay and padding.
 
 ## Alpha 3 highlights
 
@@ -37,7 +59,7 @@ Carried over from Alpha 2 and unchanged:
 
 ## Downloads
 
-Compiled runtimes are published as versioned GitHub Release assets rather than committed as large binary blobs in Git history. Download the archive matching your platform. Alpha 3 uses `release/SHA256SUMS-0.3.0-alpha.1.txt`; earlier manifests remain unchanged.
+Compiled runtimes are published as versioned GitHub Release assets rather than committed as large binary blobs in Git history. Download the archive matching your platform. Alpha 4 uses `release/SHA256SUMS-0.4.0-alpha.1.txt`; earlier manifests remain unchanged.
 
 ## Folder map
 
@@ -72,13 +94,13 @@ KNOWN_ISSUES.md                Current Alpha limitations
 
 ## License status
 
-KatPlay 0.3.0-alpha.1 remains proprietary software. This technical update does not grant new commercial or redistribution rights; [LICENSE.md](LICENSE.md) is authoritative.
+KatPlay 0.4.0-alpha.1 remains proprietary software. This technical update does not grant new commercial or redistribution rights; [LICENSE.md](LICENSE.md) is authoritative.
 
 Read [LICENSE.md](LICENSE.md) and [COMMERCIAL_USE.md](COMMERCIAL_USE.md) before downloading or using the runtime.
 
 ## Integrity and security
 
-The Alpha 1 checksum manifest is signed by the original KatPlay Ed25519 release key (`SHA256:izX4xT8KNnsRqXiQ9j18CwlW04dUGsprDpoukR7vQeU`). The signing key was rotated on 30 August 2026 after the original private key was lost; Alpha 3 is signed by the replacement key (`SHA256:KQRIInURMNolBohsw8n9aNTsduSSFokUbad8CAEboWY`). Both public keys remain committed so historical signatures continue to verify. Read [SECURITY.md](SECURITY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [KNOWN_ISSUES.md](KNOWN_ISSUES.md) and [docs/VERIFY_RELEASE.md](docs/VERIFY_RELEASE.md) before distribution or security testing.
+The Alpha 1 checksum manifest is signed by the original KatPlay Ed25519 release key (`SHA256:izX4xT8KNnsRqXiQ9j18CwlW04dUGsprDpoukR7vQeU`). The signing key was rotated on 30 August 2026 after the original private key was lost; Alpha 3 and Alpha 4 are signed by the replacement key (`SHA256:KQRIInURMNolBohsw8n9aNTsduSSFokUbad8CAEboWY`). Both public keys remain committed so historical signatures continue to verify. Read [SECURITY.md](SECURITY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [KNOWN_ISSUES.md](KNOWN_ISSUES.md) and [docs/VERIFY_RELEASE.md](docs/VERIFY_RELEASE.md) before distribution or security testing.
 
 ## Alpha notice
 

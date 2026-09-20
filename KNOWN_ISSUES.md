@@ -1,6 +1,6 @@
 # Known issues and Alpha limitations
 
-This list applies to KatPlay `0.3.0-alpha.1`.
+This list applies to KatPlay `0.4.0-alpha.1`.
 
 ## Linux output validation
 
@@ -32,7 +32,13 @@ This list applies to KatPlay `0.3.0-alpha.1`.
 - Ogg and Opus are not playable. Alpha 3 adds an Ogg container parser, an Opus
   range decoder and the CELT pulse-vector codebook to the engine, but no Opus
   decoder exists yet and no Opus audio can be produced.
-- Retuned output is written as FLAC regardless of the source container.
+- A retune writes the container its output file extension names. The encoders
+  available are WAV, FLAC, MP3, AIFF, AU and raw PCM; playback of the result is
+  only advertised for WAV, FLAC and MP3.
+- A retune measures the source's concert pitch from the audio. On material
+  whose own tuning drifts between sections, two measurements of the same track
+  can differ by a cent or two; pass the reference explicitly through
+  `kattplay_retune_file_ex` when it is known.
 - Unusual, corrupted or deliberately adversarial files have not yet completed
   a broad public fuzzing campaign.
 
