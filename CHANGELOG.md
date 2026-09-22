@@ -7,6 +7,11 @@ Alpha; ABI and behavior may change before the first stable release.
 
 ### Fixed
 
+- `kattplay_version()` reported `0.2.0-alpha.1`: the string was a literal in
+  the runtime source and was not bumped for Alpha 3 or Alpha 4. It is now
+  derived from the build's project version, and the release smoke test fails
+  if the packaged runtime disagrees with `VERSION`. The Alpha 4 binaries were
+  rebuilt on 2026-09-22 with this as the only change.
 - Offline retune assumed every source was tuned to A4 = 440 Hz. A mix that sits
   a few cents away from that landed the same few cents away from the requested
   target: on one test track a 432 Hz request produced 431.8 Hz. The source's own

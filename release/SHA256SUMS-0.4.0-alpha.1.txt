@@ -1,4 +1,4 @@
-5430a16f65895d01e7d882837f97dcb3a5182687a4e8fd2e1221637d795ba325  KatPlay-0.4.0-alpha.1-android-arm64-v8a.zip
-02c5fb68db1f58b03bc0e509d1ac53da896d5a82ea2ea6a10a853625ca0bd75c  KatPlay-0.4.0-alpha.1-integration-examples.zip
-6c6d15a323091044892513861dd1b81e43c49d5965bdf9c6cc46f85184072831  KatPlay-0.4.0-alpha.1-linux-x86_64.tar.gz
-ac2fdd0418c32fdb451cce84370c400ca40ef5dfe4e2b58e82319eef27fa61b5  KatPlay-0.4.0-alpha.1-windows-x86_64.zip
+4ecb2b59bf944cb54bf93398f26112cafad141f71a556460f9912c80025a06a2  KatPlay-0.4.0-alpha.1-android-arm64-v8a.zip
+2a255e6c63a8971e99ed64dad875649aefda6c3fd773704c94a8f5a73c3dc74e  KatPlay-0.4.0-alpha.1-integration-examples.zip
+8d0485a8759f8a3669b6cd811a290d7334d0db58d18b929e8c9e70bcd6bb71c7  KatPlay-0.4.0-alpha.1-linux-x86_64.tar.gz
+318d021b45329c0f06b2e34055b2ebb32047ffa3741c811d6c6a3ddf0aa3d08a  KatPlay-0.4.0-alpha.1-windows-x86_64.zip

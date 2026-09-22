@@ -25,6 +25,8 @@ public static class KattPlaySmoke {
         double referenceHz, double sourceReferenceHz, byte[] error, UIntPtr errorSize);
     [DllImport(@"$dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern int kattplay_abi_version();
+    [DllImport(@"$dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr kattplay_version();
 }
 "@
 
@@ -43,6 +45,13 @@ $ok = [KattPlaySmoke]::kattplay_retune_file_ex(
     $error, [UIntPtr]::new(512))
 
 $message = [Text.Encoding]::UTF8.GetString($error).TrimEnd([char]0)
+$runtimeVersion = [Runtime.InteropServices.Marshal]::PtrToStringAnsi([KattPlaySmoke]::kattplay_version())
+$expectedVersion = (Get-Content -LiteralPath (Join-Path $PSScriptRoot "..\VERSION") -Raw).Trim()
 "abi_version = $abi"
+"runtime_version = $runtimeVersion"
+# Alpha 4 first shipped reporting 0.2.0-alpha.1; never package that again.
+if ($runtimeVersion -ne $expectedVersion) {
+    throw "runtime reports $runtimeVersion but VERSION is $expectedVersion"
+}
 if ($ok -ne 1) { throw "kattplay_retune_file_ex failed: $message" }
 "retuned -> $Output ({0:N0} bytes)" -f (Get-Item -LiteralPath $Output).Length

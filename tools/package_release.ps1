@@ -1,4 +1,4 @@
-# Assembles a KatPlay SDK release from freshly built runtimes.
+﻿# Assembles a KatPlay SDK release from freshly built runtimes.
 #
 #   .\tools\package_release.ps1 -Version 0.4.0-alpha.1
 #
@@ -6,7 +6,7 @@
 # archived into release/ in the layout every previous release used. Signing is
 # a separate, deliberate step:
 #
-#   ssh-keygen -Y sign -f $HOME\.ssh\<key> -n file release\SHA256SUMS-<ver>.txt
+#   ssh-keygen -Y sign -f $HOME\.ssh\<key> -n katplay-release release\SHA256SUMS-<ver>.txt
 
 [CmdletBinding()]
 param(
