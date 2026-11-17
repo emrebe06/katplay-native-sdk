@@ -9,7 +9,7 @@ from kattplay import NativePlayer
 def main() -> None:
     parser = argparse.ArgumentParser(description="Play audio through KatPlay")
     parser.add_argument("library", help="Path to KattPlay DLL or .so")
-    parser.add_argument("audio", help="Path to WAV, FLAC or MP3")
+    parser.add_argument("audio", help="Path to WAV, FLAC, MP3 or Opus")
     args = parser.parse_args()
 
     with NativePlayer(args.library) as player:

@@ -29,16 +29,18 @@
 
 ## Codec scope
 
-Playback scope for this Alpha package is WAV, FLAC and MP3.
+Playback scope for this Alpha package is WAV, FLAC, MP3 and Ogg Opus.
 
 AAC is not advertised. The native AAC-LC decoder is still under incremental
 conformance development and rejects most real-world files; only ADTS is
 recognised as a container. It will be advertised once its streaming and player
 paths pass the same release tests as the three formats above.
 
-Ogg and Opus are not playable. The engine gained Ogg container parsing, an
-Opus range decoder and the CELT pulse-vector codebook in Alpha 3, but the Opus
-decoder itself does not exist yet.
+Ogg Opus plays when the stream is CELT-only, mono or stereo. Streams containing
+SILK or hybrid packets, which encoders use for speech and at low bitrates, and
+streams with more than two channels are refused at load with an
+unsupported-format error. Output is always 48 kHz. Details are in
+KNOWN_ISSUES.md.
 
 ## Offline retuning
 

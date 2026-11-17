@@ -1,14 +1,14 @@
 # Known issues and Alpha limitations
 
-This list applies to KatPlay `0.4.0-alpha.1`.
+This list applies to KatPlay `0.4.2-alpha.1`.
 
 ## Linux output validation
 
 - The Linux x86-64 ELF, C ABI exports and ALSA backend markers have been
   verified, but physical audible playback has not yet been tested on a Linux
   machine.
-- PipeWire is reached through its ALSA compatibility layer. Alpha 2 does not
-  contain a direct native `libpipewire` backend.
+- PipeWire is reached through its ALSA compatibility layer. This release does
+  not contain a direct native `libpipewire` backend.
 - Selecting a raw ALSA `hw:` device may fail when that device cannot accept the
   requested float format, channel count or sample rate. Prefer the `default`
   PCM unless direct hardware access is required.
@@ -19,19 +19,38 @@ This list applies to KatPlay `0.4.0-alpha.1`.
 - Windows: x86-64 only.
 - Linux: x86-64 only.
 - macOS, iOS, Windows ARM64, Linux ARM and Android x86/x86-64 binaries are not
-  included in Alpha 2.
+  included in this release.
 
 ## Format scope
 
-- Advertised playback formats are WAV, FLAC and MP3.
+- Advertised playback formats are WAV, FLAC, MP3 and Ogg Opus (CELT-only,
+  mono or stereo; see below).
 - AAC is decodable but deliberately not advertised. The native AAC-LC decoder
   is under incremental conformance development and currently handles only a
   narrow slice of the spectral codebooks, so most real-world AAC files are
   rejected with an unsupported-format error rather than played. Do not build on
   it yet. ADTS is the only AAC container recognised; `.m4a`/MP4 is not read.
-- Ogg and Opus are not playable. Alpha 3 adds an Ogg container parser, an Opus
-  range decoder and the CELT pulse-vector codebook to the engine, but no Opus
-  decoder exists yet and no Opus audio can be produced.
+- Opus is decoded for CELT-only streams. Streams containing SILK or hybrid
+  packets are refused at load with an unsupported-format error rather than
+  played with gaps. Encoders produce those packets for speech and at low
+  bitrates: libopus used them for stereo at 24 and 32 kbps in our
+  tests, and plain CELT for music at 96 kbps and above. Voice recordings and low-bitrate
+  podcasts are therefore likely to be refused.
+- Opus with more than two channels (mapping family 1 beyond stereo, or any
+  multistream layout) is refused. `.ogg` files that hold Vorbis rather than
+  Opus are not playable.
+- Opus frames of zero or one byte (discontinuous transmission or lost frames)
+  decode as silence; there is no packet-loss concealment.
+- Opus is decode-only. A retune can read an Opus file but cannot write one.
+- Opus decoder overshoot above full scale is soft-limited between zero
+  crossings, not passed through. libopus' float decoder uses a different
+  curve, so on brickwalled masters the two differ in those peaks (50-55 dB SNR
+  on one test song, against 66-71 dB elsewhere).
+- An Opus seek decodes 80 ms before the target from a fresh state, as
+  RFC 7845 recommends. The first few milliseconds after a seek therefore
+  differ slightly from a straight-through decode.
+- An Opus file is read into memory whole (its compressed size, not PCM) when
+  it is loaded and again on each seek.
 - A retune writes the container its output file extension names. The encoders
   available are WAV, FLAC, MP3, AIFF, AU and raw PCM; playback of the result is
   only advertised for WAV, FLAC and MP3.

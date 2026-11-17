@@ -3,6 +3,45 @@
 All notable KatPlay SDK changes are recorded here. KatPlay is currently in
 Alpha; ABI and behavior may change before the first stable release.
 
+## [0.4.2-alpha.1] - 2026-11-17
+
+No 0.4.1 was published; this release follows 0.4.0-alpha.1 directly.
+
+### Added
+
+- Ogg Opus playback. `.opus` and `.ogg` files, and extensionless paths such as
+  Android's `/proc/self/fd/<n>` whose first page is an Ogg Opus header, play
+  through a native fixed-point CELT decoder, streamed like MP3 and FLAC rather
+  than decoded whole before the first frame. Pre-skip, end trimming and the
+  stream's output gain are applied; output is 48 kHz, mono or stereo.
+- Opus files are accepted as offline retune input.
+- Seeking in Opus restarts the decoder 80 ms before the target from a fresh
+  state instead of decoding from the start of the file.
+
+Decoder accuracy, measured against libopus' own decoder on synthetic tones and
+two songs encoded by libopus at 96-192 kbps: identical length, 66-71 dB SNR.
+The CELT layer reproduces the RFC 6716 fixed-point reference decoder's PCM
+bit for bit on the RFC 8251 conformance vectors.
+
+### Fixed
+
+- WAV streaming playback read 8-bit PCM, 20-bit-in-24 PCM and 64-bit float
+  files wrongly or not at all, because samples were decoded by their valid bit
+  count instead of their container width. Unsupported bit depths are now
+  refused when the file is opened, before any audio is read, and the streaming
+  path decodes the same samples as the buffered one.
+- Lossy decoders overshoot full scale on loud masters (one test song reached
+  1.39). Opus output bends each such excursion onto full scale between its
+  zero crossings instead of clipping it flat.
+
+### Not supported (rejected with an unsupported-format error)
+
+- Opus streams containing SILK or hybrid packets. Encoders use these for
+  speech and at low bitrates: libopus produced them for stereo at 24 and 32 kbps
+  in our tests, and plain CELT for music at 96 kbps and above. Such a stream is
+  refused at load rather than played with gaps.
+- Opus with more than two channels, and writing Opus.
+
 ## [0.4.0-alpha.1] - 2026-09-20
 
 ### Fixed

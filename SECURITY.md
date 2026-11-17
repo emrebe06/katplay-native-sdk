@@ -2,7 +2,7 @@
 
 ## Supported version
 
-KatPlay `0.4.0-alpha.1` is the currently supported public SDK version.
+KatPlay `0.4.2-alpha.1` is the currently supported public SDK version.
 Because this is Alpha software, support is best-effort and no security SLA is
 offered.
 
@@ -25,7 +25,8 @@ exploit details before a coordinated fix or disclosure decision.
 
 ## In-scope examples
 
-- memory corruption or code execution caused by a crafted WAV, FLAC or MP3;
+- memory corruption or code execution caused by a crafted WAV, FLAC, MP3 or
+  Ogg Opus file;
 - out-of-bounds reads/writes, integer overflows or use-after-free behavior;
 - unsafe path handling in the public load interface;
 - denial of service that is reliably triggered by a small valid or malformed

@@ -61,7 +61,9 @@ References:
 
 ## Audio standards and names
 
-WAV, FLAC and MP3 names identify interoperable formats. KatPlay's copyright and
+WAV, FLAC, MP3 and Opus names identify interoperable formats. The Opus decoder
+is an original implementation written from the RFC 6716, RFC 7845 and
+RFC 8251 specifications; it contains no libopus code. KatPlay's copyright and
 license cover its original implementation, not third-party standards,
 trademarks, patents or platform APIs. Users remain responsible for rights that
 may apply to their jurisdiction and use case.

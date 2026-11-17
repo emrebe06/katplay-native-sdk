@@ -2,7 +2,7 @@ using KattPlaySample;
 
 if (args.Length != 1)
 {
-    Console.Error.WriteLine("Usage: KattPlaySample <audio.wav|audio.flac|audio.mp3>");
+    Console.Error.WriteLine("Usage: KattPlaySample <audio.wav|audio.flac|audio.mp3|audio.opus>");
     return 2;
 }
 
